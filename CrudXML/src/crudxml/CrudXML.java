@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package crudxml;
-
+import dom.*;
+import views.*;
 /**
  *
  * @author fernando.martinez
@@ -15,7 +16,8 @@ public class CrudXML {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        frmPrincipal p = new frmPrincipal();
+        p.setVisible(true);
     }
     
 }
