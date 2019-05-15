@@ -72,9 +72,9 @@ public class StudentDOM {
                 Element student = (Element) nl.item(i);
                 if (student.getElementsByTagName("id").item(0).getTextContent().equals(getId())) {
                     //Update value of name
-                    student.getElementsByTagName("name").item(0).setTextContent(getName());
+                    student.getElementsByTagName("name").item(0).setTextContent(this.name);
                     //Update value of age
-                    student.getElementsByTagName("age").item(0).setTextContent(String.valueOf(getAge()));
+                    student.getElementsByTagName("age").item(0).setTextContent(String.valueOf(this.age));
                 }
             }
             //Write to file

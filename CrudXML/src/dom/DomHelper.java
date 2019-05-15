@@ -75,12 +75,27 @@ public class DomHelper {
                 Element student = (Element) nl.item(i);
                 id = student.getElementsByTagName("id").item(0).getTextContent();
                 name = student.getElementsByTagName("name").item(0).getTextContent();
-                age = Integer.parseInt(student.getElementsByTagName("id").item(0).getTextContent());
+                age = Integer.parseInt(student.getElementsByTagName("age").item(0).getTextContent());
                 StudentDOM std = new StudentDOM(id, name, age);
                 StudensList.studentsList.add(std);
+                StudensList.id_siguiente = Integer.parseInt(id) + 1;
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+    
+        public static boolean isNumeric(String cadena) {
+
+        boolean resultado;
+
+        try {
+            Integer.parseInt(cadena);
+            resultado = true;
+        } catch (NumberFormatException excepcion) {
+            resultado = false;
+        }
+
+        return resultado;
     }
 }

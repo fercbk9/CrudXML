@@ -13,7 +13,9 @@ import java.util.ArrayList;
  */
 public class StudensList {
     public static ArrayList<StudentDOM> studentsList;
+    public static int id_siguiente;
     public static void inicializar(){
         studentsList = new ArrayList<StudentDOM>();
+        id_siguiente = 0;
     }
 }
