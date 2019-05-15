@@ -1,6 +1,7 @@
 package dom;
 
 import java.io.StringWriter;
+import java.util.ArrayList;
 import org.w3c.dom.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -57,6 +58,27 @@ public class DomHelper {
             DOMSource source = new DOMSource(d);
             StreamResult sr = new StreamResult(path_to_file);
             tf.transform(source, sr);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+    
+    public static void readXMLToList(){
+        StudensList.inicializar();
+        String id;
+        String name;
+        int age;
+         try {
+            Document d = (Document) DomHelper.getDocument("src\\data\\students.xml");
+            NodeList nl = d.getElementsByTagName("student");
+            for (int i = 0; i < nl.getLength(); i++) {
+                Element student = (Element) nl.item(i);
+                id = student.getElementsByTagName("id").item(0).getTextContent();
+                name = student.getElementsByTagName("name").item(0).getTextContent();
+                age = Integer.parseInt(student.getElementsByTagName("id").item(0).getTextContent());
+                StudentDOM std = new StudentDOM(id, name, age);
+                StudensList.studentsList.add(std);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
