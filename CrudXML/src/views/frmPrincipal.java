@@ -5,6 +5,8 @@
  */
 package views;
 
+import dom.DomHelper;
+
 /**
  *
  * @author fernando.martinez
@@ -16,6 +18,8 @@ public class frmPrincipal extends javax.swing.JFrame {
      */
     public frmPrincipal() {
         initComponents();
+        
+        
     }
 
     /**
