@@ -8,9 +8,16 @@ package views;
 import dom.DomHelper;
 import dom.StudensList;
 import dom.StudentDOM;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import jdbc.JDBCHelper;
+import jdbc.MyException;
+import jdbc.VehicleJDBC;
+import jdbc.VehicleList;
 
 /**
  *
@@ -26,24 +33,40 @@ public class frmJdbc extends javax.swing.JFrame {
     String id_seleccionado;
 
     public frmJdbc(JFrame padre) {
-        initComponents();
-        this.padre = padre;
-        this.setVisible(true);
-        cargarTabla();
+
+        try {
+            initComponents();
+            this.padre = padre;
+            this.setVisible(true);
+            JDBCHelper.abrirConexion();
+            try {
+                JDBCHelper.cierraConexion();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+            cargarTabla();
+        } catch (MyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
     }
 
     private void cargarTabla() {
 
-        //DomHelper.readXMLToList();
-        modelo = new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Edad");
-        dt.setModel(modelo);
-        for (StudentDOM std : StudensList.studentsList) {
-            modelo.addRow(new Object[]{std.getId(), std.getName(), std.getAge()});
+        try {
+            VehicleList.vehicleList = JDBCHelper.getVehiclesList();
+            modelo = new DefaultTableModel();
+            modelo.addColumn("Matricula");
+            modelo.addColumn("Modelo");
+            modelo.addColumn("Año");
+            dt.setModel(modelo);
+            for (VehicleJDBC std : VehicleList.vehicleList) {
+                modelo.addRow(new Object[]{std.getMatricula(), std.getModelo(), std.getAño()});
 
+            }
+        } catch (MyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
+
     }
 
     /**
@@ -63,29 +86,31 @@ public class frmJdbc extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         dt = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
+        txtMatricula = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        txtEdad = new javax.swing.JTextField();
+        txtModelo = new javax.swing.JTextField();
         txtBuscar = new javax.swing.JTextField();
         btnBusqueda = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        txtAnio = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnUpdate.setText("Actualizar Estudiante");
+        btnUpdate.setText("Actualizar Vehiculo");
         btnUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnUpdateActionPerformed(evt);
             }
         });
 
-        btnAlta.setText("Alta Estudiante");
+        btnAlta.setText("Alta Vehiculo");
         btnAlta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnAltaActionPerformed(evt);
             }
         });
 
-        btnBaja.setText("Baja Estudiante");
+        btnBaja.setText("Baja Vehiculo");
         btnBaja.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnBajaActionPerformed(evt);
@@ -123,14 +148,24 @@ public class frmJdbc extends javax.swing.JFrame {
         jScrollPane1.setViewportView(dt);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel1.setText("Nombre");
+        jLabel1.setText("Matricula");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Edad");
+        jLabel2.setText("Año");
 
-        txtEdad.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        txtModelo.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         btnBusqueda.setText("Buscar");
+        btnBusqueda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBusquedaActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setText("Modelo");
+
+        txtAnio.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -161,11 +196,13 @@ public class frmJdbc extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(35, 35, 35)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(txtAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -176,15 +213,21 @@ public class frmJdbc extends javax.swing.JFrame {
                     .addComponent(btnVolver)
                     .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnBusqueda))
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
+                    .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtEdad, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txtAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -211,35 +254,44 @@ public class frmJdbc extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-        if (txtNombre.getText().equals("") || txtEdad.getText().equals("")) {
+        if (txtMatricula.getText().equals("") || txtModelo.getText().equals("") || txtAnio.getText().equals("")) {
             JOptionPane.showMessageDialog(this, "Para actualizar tienes que seleccionar una linea!");
-        } else if (!DomHelper.isNumeric(txtEdad.getText())) {
+        } else if (!DomHelper.isNumeric(txtAnio.getText())) {
             JOptionPane.showMessageDialog(this, "La edad debe ser un numero entero!");
-            txtEdad.setText("");
+            txtModelo.setText("");
         } else {
-            StudentDOM std = new StudentDOM(id_seleccionado, txtNombre.getText(), Integer.parseInt(txtEdad.getText()));
-            std.Update();
-            cargarTabla();
-            txtNombre.setText("");
-            txtEdad.setText("");
-            JOptionPane.showMessageDialog(this, "Estudiante Actualizado!");
+            try {
+                JDBCHelper.updateVehicle(new VehicleJDBC(txtMatricula.getText(), txtModelo.getText(), Integer.parseInt(txtAnio.getText())));
+                cargarTabla();
+                txtMatricula.setText("");
+                txtModelo.setText("");
+                JOptionPane.showMessageDialog(this, "Estudiante Actualizado!");
+            } catch (MyException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnAltaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAltaActionPerformed
         // TODO add your handling code here:
-        if (txtNombre.getText().equals("") || txtEdad.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "Para dar de alta tienes que introducir nombre y edad!");
-        } else if (!DomHelper.isNumeric(txtEdad.getText())) {
-            JOptionPane.showMessageDialog(this, "La edad debe ser un numero entero!");
-            txtEdad.setText("");
+        if (txtMatricula.getText().equals("") || txtModelo.getText().equals("") || txtAnio.getText().equals("")) {
+            JOptionPane.showMessageDialog(this, "Para dar de alta tienes que introducir Matricula, modelo y edad!");
+        } else if (!DomHelper.isNumeric(txtAnio.getText())) {
+            JOptionPane.showMessageDialog(this, "El año debe ser un numero entero!");
+            txtModelo.setText("");
         } else {
-            StudentDOM std = new StudentDOM(String.valueOf(StudensList.id_siguiente), txtNombre.getText(), Integer.parseInt(txtEdad.getText()));
-            std.Add();
-            modelo.addRow(new Object[]{std.getId(), std.getName(), std.getAge()});
-            txtNombre.setText("");
-            txtEdad.setText("");
-            JOptionPane.showMessageDialog(this, "Estudiante Añadido!");
+            VehicleJDBC std;
+            try {
+                std = new VehicleJDBC(txtMatricula.getText(), txtModelo.getText(), Integer.parseInt(txtAnio.getText()));
+                JDBCHelper.guardaVehiculo(std);
+                modelo.addRow(new Object[]{std.getMatricula(), std.getModelo(), std.getAño()});
+                txtMatricula.setText("");
+                txtModelo.setText("");
+                txtAnio.setText("");
+                JOptionPane.showMessageDialog(this, "Estudiante Añadido!");
+            } catch (MyException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
         }
     }//GEN-LAST:event_btnAltaActionPerformed
 
@@ -247,11 +299,15 @@ public class frmJdbc extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (dt.getSelectedRowCount() > 0) {
             for (int i : dt.getSelectedRows()) {
-                //StudentDOM std = new StudentDOM(String.valueOf(modelo.getValueAt(i, 0)), "", 0);
-                //std.Delete();
+                try {
+                    //StudentDOM std = new StudentDOM(String.valueOf(modelo.getValueAt(i, 0)), "", 0);
+                    JDBCHelper.eliminoCoches(new VehicleJDBC(String.valueOf(modelo.getValueAt(i, 0)), "", 0));
+                    cargarTabla();
+                    JOptionPane.showMessageDialog(this, "Estudiantes Eliminados!");
+                } catch (MyException ex) {
+                    JOptionPane.showMessageDialog(this, ex.getMessage());
+                }
             }
-            cargarTabla();
-            JOptionPane.showMessageDialog(this, "Estudiantes Eliminados!");
         } else {
             JOptionPane.showMessageDialog(this, "Debe seleccionar al menos una fila!");
         }
@@ -268,11 +324,31 @@ public class frmJdbc extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (dt.getSelectedRowCount() == 1) {
             int i = dt.getSelectedRow();
-            txtNombre.setText(modelo.getValueAt(i, 1).toString());
-            txtEdad.setText(modelo.getValueAt(i, 2).toString());
-            id_seleccionado = modelo.getValueAt(i, 0).toString();
+            txtMatricula.setText(modelo.getValueAt(i, 0).toString());
+            txtModelo.setText(modelo.getValueAt(i, 1).toString());
+            txtAnio.setText(modelo.getValueAt(i, 2).toString());
         }
     }//GEN-LAST:event_dtMouseClicked
+
+    private void btnBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaActionPerformed
+        // TODO add your handling code here:
+            try {
+                VehicleList.vehicleList = JDBCHelper.getVehiclesListFiltered(txtBuscar.getText());
+                modelo = new DefaultTableModel();
+                modelo.addColumn("Matricula");
+                modelo.addColumn("Modelo");
+                modelo.addColumn("Año");
+                dt.setModel(modelo);
+                for (VehicleJDBC std : VehicleList.vehicleList) {
+                    modelo.addRow(new Object[]{std.getMatricula(), std.getModelo(), std.getAño()});
+
+                }
+            } catch (MyException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+       
+
+    }//GEN-LAST:event_btnBusquedaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -287,10 +363,12 @@ public class frmJdbc extends javax.swing.JFrame {
     private javax.swing.JTable dt;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField txtAnio;
     private javax.swing.JTextField txtBuscar;
-    private javax.swing.JTextField txtEdad;
-    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtMatricula;
+    private javax.swing.JTextField txtModelo;
     // End of variables declaration//GEN-END:variables
 }

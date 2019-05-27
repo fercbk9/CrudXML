@@ -46,6 +46,11 @@ public class frmPrincipal extends javax.swing.JFrame {
         });
 
         btnJdbc.setText("CRUD JDBC");
+        btnJdbc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJdbcActionPerformed(evt);
+            }
+        });
 
         btnExit.setText("Salir");
         btnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -105,6 +110,12 @@ public class frmPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnJdbcActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJdbcActionPerformed
+        // TODO add your handling code here:
+        frmJdbc frm = new frmJdbc(this);
+        frm.padre.dispose();
+    }//GEN-LAST:event_btnJdbcActionPerformed
 
     /**
      * @param args the command line arguments
