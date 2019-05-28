@@ -5,6 +5,7 @@
  */
 package jdbc;
 
+import general.Config;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -21,19 +22,19 @@ public class JDBCHelper {
     public static Connection conexion;
 
     private static void connect() throws SQLException {
-        String db = "vehiculos";
-        String servidorMysql = "jdbc:mysql://localhost/";
-        String user = "user";
-        String pass = "user@1234";
+        String db = Config.DatabaseJDBC;
+        String servidorMysql = "jdbc:mysql://"+ Config.HostJDBC +"/";
+        String user = Config.UserJDBC;
+        String pass = Config.PassJDBC;
         conexion = DriverManager.getConnection(servidorMysql + db, user, pass);
 
     }
 
     private static void connectNew() throws SQLException {
         //introducimos los datos de la base de datos
-        String servidorMysql = "jdbc:mysql://localhost/";
-        String user = "user";
-        String pass = "user@1234";
+        String servidorMysql = "jdbc:mysql://"+ Config.HostJDBC +"/";
+        String user = Config.UserJDBC;
+        String pass = Config.PassJDBC;
         //cargamos el diver
         conexion = DriverManager.getConnection(servidorMysql, user, pass);
     }

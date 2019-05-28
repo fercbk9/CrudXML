@@ -6,11 +6,6 @@
 package views;
 
 import dom.DomHelper;
-import dom.StudensList;
-import dom.StudentDOM;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -23,31 +18,17 @@ import jdbc.VehicleList;
  *
  * @author fernando.martinez
  */
-public class frmJdbc extends javax.swing.JFrame {
+public class frmOdbc extends javax.swing.JFrame {
 
     /**
-     * Creates new form frmJdbc
+     * Creates new form frmOdbc
      */
     JFrame padre;
     DefaultTableModel modelo;
-    String id_seleccionado;
 
-    public frmJdbc(JFrame padre) {
-
-        try {
-            initComponents();
-            this.padre = padre;
-            this.setVisible(true);
-            JDBCHelper.abrirConexion();
-            try {
-                JDBCHelper.cierraConexion();
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
-            }
-            cargarTabla();
-        } catch (MyException ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
-        }
+    public frmOdbc(JFrame padre) {
+        initComponents();
+        this.padre = padre;
     }
 
     private void cargarTabla() {
@@ -181,7 +162,7 @@ public class frmJdbc extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnBaja, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                                .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnVolver)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -203,7 +184,7 @@ public class frmJdbc extends javax.swing.JFrame {
                                     .addComponent(txtAnio, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtModelo, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtMatricula, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -330,27 +311,52 @@ public class frmJdbc extends javax.swing.JFrame {
 
     private void btnBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBusquedaActionPerformed
         // TODO add your handling code here:
-            try {
-                VehicleList.vehicleList = JDBCHelper.getVehiclesListFiltered(txtBuscar.getText());
-                modelo = new DefaultTableModel();
-                modelo.addColumn("Matricula");
-                modelo.addColumn("Modelo");
-                modelo.addColumn("Año");
-                dt.setModel(modelo);
-                for (VehicleJDBC std : VehicleList.vehicleList) {
-                    modelo.addRow(new Object[]{std.getMatricula(), std.getModelo(), std.getAño()});
+        try {
+            VehicleList.vehicleList = JDBCHelper.getVehiclesListFiltered(txtBuscar.getText());
+            modelo = new DefaultTableModel();
+            modelo.addColumn("Matricula");
+            modelo.addColumn("Modelo");
+            modelo.addColumn("Año");
+            dt.setModel(modelo);
+            for (VehicleJDBC std : VehicleList.vehicleList) {
+                modelo.addRow(new Object[]{std.getMatricula(), std.getModelo(), std.getAño()});
 
-                }
-            } catch (MyException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage());
             }
-       
+        } catch (MyException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
 
     }//GEN-LAST:event_btnBusquedaActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(frmOdbc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(frmOdbc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(frmOdbc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(frmOdbc.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlta;

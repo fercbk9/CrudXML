@@ -5,6 +5,7 @@
  */
 package crudxml;
 import dom.*;
+import general.Config;
 import views.*;
 /**
  *
@@ -16,6 +17,8 @@ public class CrudXML {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        Config cfg = new Config();
+        Config.readProperties(cfg);
         frmPrincipal p = new frmPrincipal();
         p.setVisible(true);
     }
