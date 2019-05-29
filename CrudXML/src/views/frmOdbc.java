@@ -6,6 +6,7 @@
 package views;
 
 import dom.DomHelper;
+import dom.StudensList;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -13,6 +14,8 @@ import jdbc.JDBCHelper;
 import jdbc.MyException;
 import jdbc.VehicleJDBC;
 import jdbc.VehicleList;
+import odbc.ODBCHelper;
+import odbc.StudentList;
 
 /**
  *
@@ -29,12 +32,13 @@ public class frmOdbc extends javax.swing.JFrame {
     public frmOdbc(JFrame padre) {
         initComponents();
         this.padre = padre;
+        cargarTabla();
     }
 
     private void cargarTabla() {
 
         try {
-            VehicleList.vehicleList = JDBCHelper.getVehiclesList();
+            StudentList.studentList = ODBCHelper.getStudentsList();
             modelo = new DefaultTableModel();
             modelo.addColumn("Matricula");
             modelo.addColumn("Modelo");
